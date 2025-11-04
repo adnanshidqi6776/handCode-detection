@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Home</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous" />
+
+    <style>
+      /* Mirror video */
+      #camera {
+        transform: scaleX(-1);
+        -webkit-transform: scaleX(-1);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-4">
+      <!--Kamera langsung aktif-->
+      <div class="row justify-content-center">
+        <div class="col-6 text-center">
+          <video id="camera" width="75%" autoplay playsinline></video>
+        </div>
+      </div>
+
+      <!--input batas deteksi kecurangan-->
+      <div class="row justify-content-center mt-4">
+        <div class="col-6">
+          <div class="input-group mb-3">
+            <input
+              type="number"
+              min="1"
+              id="limitInput"
+              class="form-control"
+              placeholder="Input cheating detection limits!" />
+            <button
+              onclick="goToTestPage()"
+              class="btn btn-outline-secondary"
+              type="button"
+              id="button-start">
+              Start
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kamera langsung aktif -->
+    <script>
+      const video = document.getElementById("camera");
+
+      // Kamera langsung aktif
+      async function startCamera() {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+          });
+          video.srcObject = stream;
+        } catch (error) {
+          alert("Gagal mengakses kamera: " + error.message);
+        }
+      }
+
+      // Jalankan kamera otomatis saat halaman selesai dimuat
+      window.addEventListener("load", startCamera);
+
+      function goToTestPage() {
+        const limit = document.getElementById("limitInput").value;
+        if (!limit || limit < 1) {
+          alert("Masukkan angka minimal 1 terlebih dahulu!");
+          return;
+        }
+        // Redirect dengan query parameter
+        window.location.href = `testPage.html?limit=${limit}`;
+      }
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"></script>
+  </body>
+</html>

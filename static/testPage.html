@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Online Test Simulator</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous" />
+
+    <style>
+      .soal-grid .btn {
+        width: 45px;
+        height: 45px;
+        padding: 0;
+      }
+
+      .option-label {
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .option-label:hover {
+        background-color: #f2f2f2;
+      }
+
+      input[type="radio"]:checked + .option-label {
+        background-color: #d1e7dd;
+        border-color: #198754;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation Bar-->
+    <nav class="navbar navbar-expand-lg" style="background-color: #f2f2f2">
+      <div
+        class="container-fluid d-flex justify-content-between align-items-center">
+        <!-- Logo -->
+        <img
+          src="https://openeducat.org/web/image/website/1/social_default_image?unique=0917bc6"
+          alt="logo"
+          height="50rem"
+          width="80rem" />
+
+        <!-- Tombol Toggle -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Menu -->
+        <div
+          class="collapse navbar-collapse justify-content-center"
+          id="navbarSupportedContent">
+          <ul class="navbar-nav mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">About</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Help
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Proctor</a></li>
+                <li><a class="dropdown-item" href="#">Teacher</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item" href="#">Admin</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!--content-->
+    <div class="container-fluid mt-4">
+      <div class="row">
+        <!-- Kolom kiri -->
+        <div class="col-2 bg-light border-end text-center py-3">
+          <h3 class="mb-3">Pilihan Soal</h3>
+
+          <div
+            class="soal-grid mx-auto"
+            style="
+              display: grid;
+              grid-template-columns: repeat(4, 1fr);
+              gap: 10px;
+            ">
+            <!-- Tombol 1–25 -->
+            <button type="button" class="btn btn-outline-secondary">1</button>
+            <button type="button" class="btn btn-outline-secondary">2</button>
+            <button type="button" class="btn btn-outline-secondary">3</button>
+            <button type="button" class="btn btn-outline-secondary">4</button>
+            <button type="button" class="btn btn-outline-secondary">5</button>
+            <button type="button" class="btn btn-outline-secondary">6</button>
+            <button type="button" class="btn btn-outline-secondary">7</button>
+            <button type="button" class="btn btn-outline-secondary">8</button>
+            <button type="button" class="btn btn-outline-secondary">9</button>
+            <button type="button" class="btn btn-outline-secondary">10</button>
+            <button type="button" class="btn btn-outline-secondary">11</button>
+            <button type="button" class="btn btn-outline-secondary">12</button>
+            <button type="button" class="btn btn-outline-secondary">13</button>
+            <button type="button" class="btn btn-outline-secondary">14</button>
+            <button type="button" class="btn btn-outline-secondary">15</button>
+            <button type="button" class="btn btn-outline-secondary">16</button>
+            <button type="button" class="btn btn-outline-secondary">17</button>
+            <button type="button" class="btn btn-outline-secondary">18</button>
+            <button type="button" class="btn btn-outline-secondary">19</button>
+            <button type="button" class="btn btn-outline-secondary">20</button>
+            <button type="button" class="btn btn-outline-secondary">21</button>
+            <button type="button" class="btn btn-outline-secondary">22</button>
+            <button type="button" class="btn btn-outline-secondary">23</button>
+            <button type="button" class="btn btn-outline-secondary">24</button>
+            <button type="button" class="btn btn-outline-secondary">25</button>
+          </div>
+        </div>
+
+        <!-- Kolom tengah -->
+        <div class="col-7 p-4">
+          <div class="card shadow-sm p-4">
+            <h5 class="mb-4">1. Siapa pencetus dari teori relativitas?</h5>
+
+            <form id="soal1">
+              <div class="form-check mb-2">
+                <input
+                  type="radio"
+                  class="form-check-input"
+                  name="jawaban"
+                  id="A"
+                  value="A" />
+                <label
+                  class="form-check-label option-label w-100 p-2 border rounded"
+                  for="A">
+                  A. Nikola Tesla
+                </label>
+              </div>
+
+              <div class="form-check mb-2">
+                <input
+                  type="radio"
+                  class="form-check-input"
+                  name="jawaban"
+                  id="B"
+                  value="B" />
+                <label
+                  class="form-check-label option-label w-100 p-2 border rounded"
+                  for="B">
+                  B. Thomas Alva Edison
+                </label>
+              </div>
+
+              <div class="form-check mb-2">
+                <input
+                  type="radio"
+                  class="form-check-input"
+                  name="jawaban"
+                  id="C"
+                  value="C" />
+                <label
+                  class="form-check-label option-label w-100 p-2 border rounded"
+                  for="C">
+                  C. Albert Einstein
+                </label>
+              </div>
+
+              <div class="form-check mb-2">
+                <input
+                  type="radio"
+                  class="form-check-input"
+                  name="jawaban"
+                  id="D"
+                  value="D" />
+                <label
+                  class="form-check-label option-label w-100 p-2 border rounded"
+                  for="D">
+                  D. Isaac Newton
+                </label>
+              </div>
+
+              <div class="form-check mb-3">
+                <input
+                  type="radio"
+                  class="form-check-input"
+                  name="jawaban"
+                  id="E"
+                  value="E" />
+                <label
+                  class="form-check-label option-label w-100 p-2 border rounded"
+                  for="E">
+                  E. James Prescott Joule
+                </label>
+              </div>
+
+              <div class="text-end">
+                <button type="button" class="btn btn-secondary">
+                  Previous
+                </button>
+                <button type="button" class="btn btn-secondary">Next</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Kolom kanan -->
+        <div
+          class="col-3 bg-light border-start d-flex flex-column justify-content-center align-items-center"
+          style="height: 100vh">
+          <div class="w-100 text-center">
+            <video
+              id="video"
+              autoplay
+              style="display: none; width: 100%; height: auto"></video>
+            <canvas
+              id="canvas"
+              class="w-100"
+              style="
+                background-color: black;
+                height: auto;
+                aspect-ratio: 4 / 3;
+                border-radius: 4px;
+              "></canvas>
+          </div>
+          <div class="w-100 mb-3 d-flex justify-content-end">
+            <button class="btn btn-secondary" onclick="turnOffCamera()">
+              End
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Script Kamera & WebSocket (tidak diubah) -->
+    <script>
+      let ws;
+      let stream;
+      let sendInterval;
+      const video = document.getElementById("video");
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+
+      const params = new URLSearchParams(window.location.search);
+      const limitFromURL = params.get("limit");
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        if (limitFromURL) {
+          await startCamera(limitFromURL);
+        }
+      });
+
+      async function startCamera(limit = null) {
+        stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        video.srcObject = stream;
+
+        ws = new WebSocket("ws://localhost:8000/ws");
+
+        ws.onopen = () => {
+          ws.send(JSON.stringify({ max_warnings: limit }));
+          sendInterval = setInterval(sendFrame, 50);
+        };
+
+        ws.onmessage = (event) => {
+          const data = JSON.parse(event.data);
+          ctx.save();
+          ctx.scale(-1, 1);
+          ctx.drawImage(video, -canvas.width, 0, canvas.width, canvas.height);
+          ctx.restore();
+
+          const boxes = data.boxes || [];
+          boxes.forEach((b) => {
+            const [x1, y1, x2, y2] = b.bbox;
+            ctx.strokeStyle = "yellow";
+            ctx.lineWidth = 2;
+            const mirroredX1 = canvas.width - x2;
+            const mirroredX2 = canvas.width - x1;
+            ctx.strokeRect(mirroredX1, y1, mirroredX2 - mirroredX1, y2 - y1);
+            ctx.fillStyle = "red";
+            ctx.fillText(
+              `${b.class} (${b.confidence.toFixed(2)})`,
+              mirroredX1,
+              y1 - 5
+            );
+          });
+
+          if (data.show_warning) {
+            alert(data.message || "⚠️ Warning!");
+            if (ws.readyState === WebSocket.OPEN) {
+              ws.send(JSON.stringify({ cmd: "ack_warning" }));
+            }
+          }
+
+          if (data.stop) {
+            alert(data.message || "⚠️ Kamera dihentikan!");
+            turnOffCamera();
+          }
+        };
+
+        ws.onclose = () => turnOffCamera();
+      }
+
+      function sendFrame() {
+        if (!ws || ws.readyState !== WebSocket.OPEN) return;
+        const tmpCanvas = document.createElement("canvas");
+        tmpCanvas.width = video.videoWidth;
+        tmpCanvas.height = video.videoHeight;
+        const tmpCtx = tmpCanvas.getContext("2d");
+        tmpCtx.drawImage(video, 0, 0);
+        const dataURL = tmpCanvas.toDataURL("image/jpeg");
+        ws.send(JSON.stringify({ image: dataURL }));
+      }
+
+      function turnOffCamera() {
+        if (stream) {
+          stream.getTracks().forEach((track) => track.stop());
+          video.srcObject = null;
+        }
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    </script>
+
+    <!-- Bootstrap JS-->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"></script>
+  </body>
+</html>

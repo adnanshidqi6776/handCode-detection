@@ -14,7 +14,6 @@ env/
 *.pth
 
 # Dataset & training output
-runs/
 train/
 valid/
 test/

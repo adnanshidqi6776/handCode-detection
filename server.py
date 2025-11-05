@@ -151,3 +151,9 @@ async def websocket_endpoint(websocket: WebSocket):
         print("⚠️ WS Closed:", e)
     finally:
         print("❌ WS Closed")
+
+# === Tambahkan ini agar jalan di lokal maupun Render ===
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("server:app", host="0.0.0.0", port=port)

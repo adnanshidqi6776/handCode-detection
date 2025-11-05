@@ -17,6 +17,7 @@ env/
 train/
 valid/
 test/
+!runs/
 detected_images/
 
 # Configs & logs

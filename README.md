@@ -1,3 +1,13 @@
+---
+title: YOLO FastAPI Detection
+emoji: 🧠
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+app_file: server.py
+pinned: false
+---
+
 # 🧠 YOLOv8 FastAPI Real-time Detection (Skripsi Project)
 
 Proyek ini adalah implementasi **FastAPI + YOLOv8 (Ultralytics)** untuk deteksi perilaku mencurigakan secara **real-time** melalui **WebSocket**.

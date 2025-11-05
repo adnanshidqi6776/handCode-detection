@@ -17,8 +17,11 @@ env/
 train/
 valid/
 test/
-!runs/
 detected_images/
+
+# Tetap upload folder runs
+!runs/
+runs/**
 
 # Configs & logs
 *.log

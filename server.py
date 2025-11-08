@@ -5,6 +5,7 @@ import cv2
 import numpy as np
 import torch
 import os
+import csv
 from fastapi import FastAPI, WebSocket
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -28,9 +29,27 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 model = YOLO('runs/detect/train/weights/best.pt')
 model.to(device)
 
+# === Fungsi untuk mencatat log pelanggaran ===
+def log_violation(violation_type, confidence, filename):
+    os.makedirs("logs", exist_ok=True)  # Pastikan folder logs ada
+    log_file = os.path.join("logs", "violations_log.csv")  # Simpan di folder logs
+    file_exists = os.path.isfile(log_file)
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    # Pastikan file ada header kalau baru dibuat
+    with open(log_file, "a", newline="") as f:
+        writer = csv.writer(f)
+        if not file_exists:
+            writer.writerow(["waktu", "jenis_pelanggaran", "confidence", "file_gambar"])
+        writer.writerow([timestamp, violation_type, f"{confidence:.2f}", filename])
+
+
+
 warning_count = 0
 max_warnings = None
 pending_warning = False
+detect_enabled = True
+
 
 
 @app.get("/")
@@ -57,8 +76,10 @@ async def websocket_endpoint(websocket: WebSocket):
             if "max_warnings" in payload:
                 max_warnings = int(payload["max_warnings"])
                 warning_count = 0
-                print(f"⚙️ Max warnings diatur ke {max_warnings}")
+                detect_enabled = payload.get("detect_enabled", True)
+                print(f"⚙️ Max warnings = {max_warnings}, Deteksi aktif = {detect_enabled}")
                 continue
+
 
             # --- Menerima frame ---
             if "image" in payload:
@@ -69,7 +90,7 @@ async def websocket_endpoint(websocket: WebSocket):
 
 
                 # Jalankan YOLO di thread terpisah agar tidak blocking event loop
-                results = await asyncio.to_thread(model, frame)
+                results = await asyncio.to_thread(model.predict, frame)
                 r = results[0]
 
                 boxes = []
@@ -80,7 +101,7 @@ async def websocket_endpoint(websocket: WebSocket):
                     conf = float(box.conf)
                     x1, y1, x2, y2 = box.xyxy[0].tolist()
 
-                    if cls in ["finger", "book", "handphone"] and conf > 0.8:
+                    if cls in ["finger", "book", "handphone"] and conf > 0.5:
                         warning_detected = True
                         print(f"Detected label={cls}, conf={conf:.2f}")
                         boxes.append({
@@ -89,32 +110,42 @@ async def websocket_endpoint(websocket: WebSocket):
                             "bbox": [x1, y1, x2, y2]
                         })
 
+                
                 # --- Simpan frame jika ada deteksi ---
                 if warning_detected:
-                    save_dir = "detected_images"
-                    os.makedirs(save_dir, exist_ok=True)
+                    if detect_enabled:
+                        # === Simpan gambar & log HANYA jika toggle ON ===
+                        save_dir = "detected_images"
+                        os.makedirs(save_dir, exist_ok=True)
 
-                    # Gambar bounding box di frame
-                    annotated_frame = frame.copy()
-                    for b in boxes:
-                        x1, y1, x2, y2 = map(int, b["bbox"])
-                        label = f"{b['class']} {b['confidence']:.2f}"
-                        cv2.rectangle(annotated_frame, (x1, y1), (x2, y2), (0, 255, 255), 2)
-                        cv2.putText(
-                            annotated_frame,
-                            label,
-                            (x1, max(y1 - 10, 20)),
-                            cv2.FONT_HERSHEY_SIMPLEX,
-                            0.6,
-                            (0, 0, 255),
-                            2,
-                        )
+                        # Gambar bounding box di frame
+                        annotated_frame = frame.copy()
+                        for b in boxes:
+                            x1, y1, x2, y2 = map(int, b["bbox"])
+                            label = f"{b['class']} {b['confidence']:.2f}"
+                            cv2.rectangle(annotated_frame, (x1, y1), (x2, y2), (0, 255, 255), 2)
+                            cv2.putText(
+                                annotated_frame,
+                                label,
+                                (x1, max(y1 - 10, 20)),
+                                cv2.FONT_HERSHEY_SIMPLEX,
+                                0.6,
+                                (0, 0, 255),
+                                2,
+                            )
 
-                    # Simpan file dengan timestamp unik
-                    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-                    filename = f"{save_dir}/deteksi_{timestamp}.jpg"
-                    cv2.imwrite(filename, annotated_frame)
-                    print(f"💾 Gambar disimpan: {filename}")
+                        # Simpan file dengan timestamp unik
+                        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+                        filename = f"{save_dir}/deteksi_{timestamp}.jpg"
+                        cv2.imwrite(filename, annotated_frame)
+                        print(f"💾 Gambar disimpan: {filename}")
+
+                        # Simpan log pelanggaran
+                        log_violation(boxes[0]['class'], boxes[0]['confidence'], filename)
+                    else:
+                        print("⚠️ Deteksi diabaikan karena toggle OFF (tidak disimpan/log)")
+
+
 
                 # Kirim hasil bounding box ke client
                 await websocket.send_text(json.dumps({
@@ -122,9 +153,9 @@ async def websocket_endpoint(websocket: WebSocket):
                 }))
 
                 # Jika ada deteksi mencurigakan
-                if warning_detected and not pending_warning:
+                if warning_detected and not pending_warning and detect_enabled:
                     pending_warning = True
-                    print("🚨 Sending show_warning to frontend")
+                    print("🚨 Sending show_warning to frontend (toggle ON)")
                     await websocket.send_text(json.dumps({
                         "show_warning": True,
                         "message": "⚠️ Perilaku mencurigakan terdeteksi!"
